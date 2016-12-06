@@ -7,7 +7,7 @@ import datetime
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 
-from agiletix.celery import agile_sync
+from agiletix.tasks import agile_sync_task
 
 
 class Command(BaseCommand):
@@ -33,7 +33,7 @@ class Command(BaseCommand):
         start_date = timezone.localtime(timezone.now())
         end_date = start_date + datetime.timedelta(days=90)
 
-        agile_sync(start_date, end_date)
+        agile_sync_task(start_date, end_date)
 
         logger.info("Agile sync complete.")
 

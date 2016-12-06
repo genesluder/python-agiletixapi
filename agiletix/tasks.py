@@ -32,7 +32,7 @@ def memcache_lock(lock_id, oid):
 
 
 @task(bind=True)
-def agile_sync(self, start_date, end_date):
+def agile_sync_task(self, start_date, end_date):
     lock_id = 'agile-sync-lock'
     with memcache_lock(lock_id, self.app.oid) as acquired:
         if acquired:

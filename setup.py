@@ -1,7 +1,12 @@
 from distutils.core import setup
 setup(
   name = 'django-agiletix',
-  packages = ['agiletix'],
+  packages = [
+    'agiletix',
+    'agiletix/migrations',
+    'agiletix/management',
+    'agiletix/management/commands',
+  ],
   version = '0.1.0',
   description = 'A Django app for interacting with the Agile Ticketing API',
   author = 'Gene Sluder',
@@ -16,6 +21,7 @@ setup(
   ],
   classifiers = [],
   install_requires=[
+    'django',
     'agiletixapi',
     'celery',
   ],
