@@ -2,8 +2,9 @@
 
 class AgileException(Exception):
 
-    def __init__(self, code=None, *args, **kwargs):
+    def __init__(self, code=None, message=None, *args, **kwargs):
         self.code = code
+        self.message = message
         super(AgileException, self).__init__(*args, **kwargs)
 
 
