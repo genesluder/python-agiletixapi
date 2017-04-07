@@ -1,7 +1,10 @@
 
 
 class AgileException(Exception):
-    pass
+
+    def __init__(self, code=None, *args, **kwargs):
+        self.code = code
+        super(AgileException, self).__init__(*args, **kwargs)
 
 
 class InternalException(AgileException):
