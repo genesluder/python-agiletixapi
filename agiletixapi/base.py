@@ -111,20 +111,8 @@ class BaseAgileAPI(object):
             if not value: empty_value_keys.append(key)
         for key in empty_value_keys:
             kwargs.pop(key, None)
-        
-        data = getattr(
-            getattr(
-                self.api, 
-                name
-            )(),
-            request_type.lower()
-            )(**kwargs)
-
-        if not data:
-            logger.error("Bad request: {0} {1} {2}".format(request_type, name, kwargs))
-            return None
-
         response = None
+        data = None
 
         retry_max = 5
         retry_sleep = 2
@@ -135,6 +123,13 @@ class BaseAgileAPI(object):
         while retry:
             retry = False
             try:
+                data = getattr(
+                    getattr(
+                        self.api, 
+                        name
+                    )(),
+                    request_type.lower()
+                    )(**kwargs)
                 response = APIResponse(data)
             except slumber.exceptions.HttpNotFoundError:
                 logger.error("HttpNotFoundError: {0} {1}".format(data, response))
@@ -143,8 +138,8 @@ class BaseAgileAPI(object):
             except slumber.exceptions.HttpServerError:
                 logger.error("HttpServerError: {0} {1}".format(data, response))
                 retry = True
-            except:
-                logger.error("HttpUknownError: {0} {1}".format(data, response))
+            except Exception as err:
+                logger.error("HttpUknownError: {0} {1} {2}".format(err, data, response))
                 retry = True
 
             if retry:
