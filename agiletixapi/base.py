@@ -132,14 +132,14 @@ class BaseAgileAPI(object):
                     )(**kwargs)
                 response = APIResponse(data)
             except slumber.exceptions.HttpNotFoundError:
-                logger.error("HttpNotFoundError: {0}".format(data))
+                logger.error("HttpNotFoundError: {0} {1}".format(data, response))
             except slumber.exceptions.HttpClientError:
-                logger.error("HttpClientError: {0}".format(data))
+                logger.error("HttpClientError: {0} {1}".format(data, response))
             except slumber.exceptions.HttpServerError:
-                logger.error("HttpServerError: {0}".format(data))
+                logger.error("HttpServerError: {0} {1}".format(data, response))
                 retry = True
             except:
-                logger.error("HttpUknownError: {0}".format(data))
+                logger.error("HttpUknownError: {0} {1}".format(data, response))
                 retry = True
 
             if retry:
