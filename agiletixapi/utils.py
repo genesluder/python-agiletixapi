@@ -1,4 +1,3 @@
-
 import os
 import pytz
 import re
@@ -92,4 +91,3 @@ def to_underscore(s):
             lambda m: "_{0}".format(m.group(1).lower()),
             re.sub(r'(?!^)([A-Z]{1}[a-z]{1})', lambda m: "_{0}".format(m.group(1).lower()), s)
         ).lower()
-

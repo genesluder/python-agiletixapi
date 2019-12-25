@@ -1,4 +1,3 @@
-
 import logging
 logger = logging.getLogger('agiletix')
 
@@ -14,8 +13,8 @@ import time
 
 from collections import namedtuple
 
-from .exceptions import ImproperlyConfigured
-from .utils import *
+from agiletixapi.exceptions import ImproperlyConfigured
+from agiletixapi.utils import *
 
 
 DEFAULT_AGILE_RESPONSE_FORMAT = 'json'
@@ -47,7 +46,6 @@ class APIResponse(object):
         success (bool): Returns True if the request was successful
 
     """
-
     error = None
     data = None
 
@@ -67,7 +65,6 @@ class BaseAgileAPI(object):
     """Base class for Agile API interfaces 
 
     """
-
     def __init__(
             self, 
             base_url,
@@ -77,7 +74,6 @@ class BaseAgileAPI(object):
             response_format=None,
             service_type=None, 
         ):
-
         self.base_url = base_url
         self.app_key = app_key
         self.user_key = user_key
@@ -151,5 +147,3 @@ class BaseAgileAPI(object):
                     retry = False
 
         return response
-
-

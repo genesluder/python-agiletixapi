@@ -1,13 +1,11 @@
-
-from .base import BaseAgileAPI
-from .utils import method_name, strftime_agile
+from agiletixapi.base import BaseAgileAPI
+from agiletixapi.utils import method_name, strftime_agile
 
 
 class AgileSalesAPI(BaseAgileAPI):
     """Interface for the Agile Sales API 
 
     """
-
     SERVICE_TYPE = 'sales'
 
     @method_name
@@ -171,4 +169,3 @@ class AgileSalesAPI(BaseAgileAPI):
             **kwargs
             )
         return response
-

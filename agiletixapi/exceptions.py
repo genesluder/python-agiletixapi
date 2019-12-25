@@ -1,5 +1,3 @@
-
-
 class AgileException(Exception):
 
     def __init__(self, code=None, message=None, *args, **kwargs):
@@ -56,4 +54,3 @@ class ServiceUnavailable(AgileAPIException):
 
     """
     pass
-
