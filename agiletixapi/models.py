@@ -168,11 +168,11 @@ class EventSalesStatus(BaseAgileJsonObject):
 
     @property
     def sales_started(self):
-        return datetime.now() > sales_status.start_sales
+        return datetime.now() > self.start_sales
 
     @property
     def sales_ended(self):
-        return timezone.now() > sales_status.end_sales
+        return timezone.now() > self.end_sales
 
 
 class Order(BaseAgileJsonObject):
