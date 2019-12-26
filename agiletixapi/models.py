@@ -1,9 +1,12 @@
+import pytz
 from collections import namedtuple
 from datetime import datetime
 
 from jsonobject import *
 
 from .utils import ms_datestring_to_datetime
+
+utc=pytz.UTC
 
 
 class AgileDateTimeProperty(DateTimeProperty):
@@ -168,11 +171,11 @@ class EventSalesStatus(BaseAgileJsonObject):
 
     @property
     def sales_started(self):
-        return datetime.now() > self.start_sales
+        return utc.localize(datetime.now()) > self.start_sales
 
     @property
     def sales_ended(self):
-        return timezone.now() > self.end_sales
+        return utc.localize(datetime.now()) > self.end_sales
 
 
 class Order(BaseAgileJsonObject):
