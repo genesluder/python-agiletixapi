@@ -6,26 +6,6 @@ from jsonobject import *
 from .utils import ms_datestring_to_datetime
 
 
-SALES_STATE_TEXT = (
-    (1, 'Sale has not started: On Sale: 10/20/2013 9:00 AM'),
-    (2, 'On sale: Buy Tickets, Add To Cart, Purchase'),
-    (3, 'Sales ended. Event pending: Check with the box office'),
-    (4, 'Event passed: Event is over'),
-    (5, 'Custom message: Sold Out, Rush Only, Check Back Soon'),
-)
-# A struct to hold Agile error codes
-SALES_STATE_CODES = {
-    'SALES_STATE_SALES_NOT_STARTED': 1,
-    'SALES_STATE_READY': 2, 
-    'SALES_STATE_SALES_ENDED': 3,
-    'SALES_STATE_EVENT_PAST': 4,
-    'SALES_STATE_CUSTOM': 5,
-}
-
-SalesStateStruct = namedtuple('SalesStateStruct', ' '.join(SALES_STATE_CODES.keys()))
-SalesState = SalesStateStruct(**SALES_STATE_CODES)
-
-
 class AgileDateTimeProperty(DateTimeProperty):
     """Custom property that converts MS date string ( Json.NET < 4.5 ) to Python date object.
 
@@ -92,6 +72,12 @@ class ItemSummary(BaseAgileJsonObject):
 
 
 class Event(BaseAgileJsonObject):
+    SALES_STATE_SALES_NOT_STARTED = 1
+    SALES_STATE_READY = 2
+    SALES_STATE_SALES_ENDED = 3
+    SALES_STATE_EVENT_PAST = 4
+    SALES_STATE_CUSTOM = 5
+
     id = IntegerProperty(name='EventID')
     external_event_id = StringProperty(name='ExternalEventID')
     org_id = IntegerProperty(name='OrgID')
@@ -115,15 +101,6 @@ class Event(BaseAgileJsonObject):
     config_thumb_image = StringProperty(name='ConfigThumbImage')
     sales_message = StringProperty(name='SalesMessage')
     sales_state = IntegerProperty(name='SalesState')
-
-    @property  
-    def sales_state_description(self):
-        description = ""
-        for choice in self.SALES_STATE_TEXT:
-            if self.sales_state == choice[1]:
-                description = choice[2]
-                break
-        return description
 
 
 class Price(BaseAgileJsonObject):
@@ -167,19 +144,27 @@ class EventSalesStatus(BaseAgileJsonObject):
     message_text = StringProperty(name='MessageText') # MessageText - AvailabilityText 
     availability_text = StringProperty(name='AvailabilityText')
 
+    @property
+    def sales_state_message(self):
+        return self._get_full_message()
+
     def _get_full_message(self):
-        return "{} {}".format(
+        return "{} - {}".format(
             self.message_text, 
             self.availability_text
         )
 
     @property
+    def is_on_sale(self):
+        return not self.display_message and self.on_sale
+
+    @property
     def sold_out(self):
-        return 'sold out' in self._get_full_message().lower()
+        return self.display_message and 'sold out' in self._get_full_message().lower()
 
     @property
     def online_sales_closed(self):
-        return 'online sales closed' in self._get_full_message().lower()
+        return self.display_message and 'online sales closed' in self._get_full_message().lower()
 
     @property
     def sales_started(self):
